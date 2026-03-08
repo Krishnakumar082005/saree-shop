@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store Settings - Silk Sutra Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #f4f6f9; }
+        .sidebar { min-height: 100vh; background-color: #343a40; color: #fff; }
+        .sidebar a { color: #c2c7d0; text-decoration: none; padding: 10px 15px; display: block; border-radius: 5px; margin-bottom: 5px; }
+        .sidebar a:hover, .sidebar a.active { background-color: #007bff; color: #fff; }
+        #bannerPreview { width:100%; max-height:200px; object-fit:cover; border-radius:8px; display:none; border: 2px dashed #dee2e6; }
+    </style>
+</head>
+<body>
+<div class="d-flex">
+    <div class="sidebar p-3" style="width:250px;">
+        <div class="text-center mb-4">
+            <i class="fas fa-dharmachakra fa-2x text-warning mb-2"></i>
+            <h5 class="fw-bold mb-0" id="sidebarStoreName">Silk Sutra Admin</h5>
+        </div>
+        <a href="index.html"><i class="fas fa-tachometer-alt me-2"></i> Dashboard</a>
+        <a href="products.html"><i class="fas fa-box me-2"></i> Products</a>
+        <a href="orders.html"><i class="fas fa-shopping-cart me-2"></i> Orders <span class="badge bg-danger ms-2" id="navOrderCount">0</span></a>
+        <a href="customers.html"><i class="fas fa-users me-2"></i> Customers</a>
+        <a href="settings.html" class="active"><i class="fas fa-cog me-2"></i> Settings</a>
+        <hr class="border-secondary my-4">
+        <a href="../index.html"><i class="fas fa-store me-2"></i> View Store</a>
+        <a href="../account/login.html" onclick="localStorage.removeItem('ss_currentUser')"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
+    </div>
+
+    <div class="flex-grow-1">
+        <nav class="navbar navbar-expand bg-white shadow-sm px-4 py-3 mb-4">
+            <h5 class="fw-bold mb-0">Store Settings</h5>
+        </nav>
+
+        <div class="container-fluid px-4">
+            <div class="row">
+                <div class="col-lg-8">
+
+                    <!-- General Info -->
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-header bg-white border-bottom py-3">
+                            <h5 class="mb-0 fw-bold"><i class="fas fa-info-circle me-2 text-primary"></i>General Information</h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <form onsubmit="saveGlobalSettings(event)">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Store Name</label>
+                                    <input type="text" id="s_storeName" class="form-control" required>
+                                    <small class="text-muted">This updates the name everywhere on the website and admin panel.</small>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Contact Email</label>
+                                    <input type="email" id="s_email" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Support Phone</label>
+                                    <input type="text" id="s_phone" class="form-control" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label fw-bold">Store Address</label>
+                                    <textarea id="s_address" class="form-control" rows="3" required></textarea>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">Currency Symbol</label>
+                                        <input type="text" id="s_currency" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">Tax Rate (%)</label>
+                                        <input type="number" id="s_tax" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-primary px-5"><i class="fas fa-save me-2"></i>Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Homepage Banner Settings -->
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-header bg-white border-bottom py-3">
+                            <h5 class="mb-0 fw-bold"><i class="fas fa-image me-2 text-success"></i>Homepage Hero Banner</h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <p class="text-muted small mb-3">Upload a banner image and set a title/subtitle. This replaces the entire hero section on the homepage.</p>
+                            <form onsubmit="saveBannerSettings(event)">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Banner Image</label>
+                                    <div class="border rounded p-3 bg-light text-center mb-2">
+                                        <img id="bannerPreview" src="" alt="Banner Preview">
+                                        <div class="mt-2">
+                                            <label for="bannerFile" class="btn btn-outline-success btn-sm">
+                                                <i class="fas fa-upload me-2"></i>Upload Banner Image
+                                                <input type="file" id="bannerFile" accept="image/*" style="display:none;" onchange="previewBanner(this)">
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <input type="url" id="s_bannerUrl" class="form-control" placeholder="OR paste image URL here...">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Banner Title</label>
+                                    <input type="text" id="s_bannerTitle" class="form-control" placeholder="Premium Handcrafted Sarees">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Banner Subtitle</label>
+                                    <input type="text" id="s_bannerSubtitle" class="form-control" placeholder="Authentic weaves from artisans across India">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Button Link</label>
+                                    <input type="text" id="s_bannerLink" class="form-control" placeholder="shop.html">
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-success px-5"><i class="fas fa-save me-2"></i>Save Banner</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-header bg-white border-bottom py-3">
+                            <h5 class="mb-0 fw-bold"><i class="fas fa-server me-2 text-warning"></i>System Status</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="fw-bold">Database Mode</span>
+                                <span class="badge bg-primary">LocalStorage</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="fw-bold">DB Version</span>
+                                <span class="text-muted">v2.0</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="fw-bold">Total Orders</span>
+                                <span class="fw-bold text-primary" id="sysOrderCount">0</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="fw-bold">Total Products</span>
+                                <span class="fw-bold text-primary" id="sysProductCount">0</span>
+                            </div>
+                            <hr>
+                            <button class="btn btn-outline-danger w-100" onclick="resetDB()">
+                                <i class="fas fa-trash-alt me-2"></i>Factory Reset Database
+                            </button>
+                            <p class="text-muted small text-center mt-2 mb-0">Clears all products, orders, users, and settings.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../js/db.js"></script>
+<script>
+    let bannerBase64 = '';
+
+    document.addEventListener('DOMContentLoaded', () => {
+        updateNavCount();
+        const s = DB.getSettings();
+        document.getElementById('sidebarStoreName').textContent = s.storeName + ' Admin';
+
+        // Fill general form
+        document.getElementById('s_storeName').value  = s.storeName;
+        document.getElementById('s_email').value      = s.email;
+        document.getElementById('s_phone').value      = s.phone;
+        document.getElementById('s_address').value    = s.address;
+        document.getElementById('s_currency').value   = s.currency;
+        document.getElementById('s_tax').value        = s.taxRate;
+
+        // Fill banner form
+        document.getElementById('s_bannerTitle').value    = s.bannerTitle    || '';
+        document.getElementById('s_bannerSubtitle').value = s.bannerSubtitle || '';
+        document.getElementById('s_bannerLink').value     = s.bannerLink     || 'shop.html';
+
+        if (s.bannerImage) {
+            const preview = document.getElementById('bannerPreview');
+            preview.src = s.bannerImage;
+            preview.style.display = 'block';
+            if (!s.bannerImage.startsWith('data:')) {
+                document.getElementById('s_bannerUrl').value = s.bannerImage;
+            } else {
+                bannerBase64 = s.bannerImage;
+            }
+        }
+
+        // System stats
+        document.getElementById('sysOrderCount').textContent   = DB.getOrders().length;
+        document.getElementById('sysProductCount').textContent = DB.getProducts().length;
+    });
+
+    function updateNavCount() {
+        document.getElementById('navOrderCount').textContent = DB.getOrders().filter(o => o.status === 'Processing').length;
+    }
+
+    function previewBanner(input) {
+        const file = input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            bannerBase64 = e.target.result;
+            const preview = document.getElementById('bannerPreview');
+            preview.src = bannerBase64;
+            preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function saveGlobalSettings(e) {
+        e.preventDefault();
+        const s = DB.getSettings();
+        s.storeName = document.getElementById('s_storeName').value;
+        s.email     = document.getElementById('s_email').value;
+        s.phone     = document.getElementById('s_phone').value;
+        s.address   = document.getElementById('s_address').value;
+        s.currency  = document.getElementById('s_currency').value;
+        s.taxRate   = document.getElementById('s_tax').value;
+        DB.saveSettings(s);
+        document.getElementById('sidebarStoreName').textContent = s.storeName + ' Admin';
+        alert('✅ General settings saved! All pages will reflect these changes on reload.');
+    }
+
+    function saveBannerSettings(e) {
+        e.preventDefault();
+        const s = DB.getSettings();
+        const urlVal = document.getElementById('s_bannerUrl').value.trim();
+        s.bannerImage    = bannerBase64 || urlVal || s.bannerImage || '';
+        s.bannerTitle    = document.getElementById('s_bannerTitle').value.trim();
+        s.bannerSubtitle = document.getElementById('s_bannerSubtitle').value.trim();
+        s.bannerLink     = document.getElementById('s_bannerLink').value.trim() || 'shop.html';
+        DB.saveSettings(s);
+        alert('✅ Banner saved! Visit the homepage to see your banner.');
+    }
+
+    function resetDB() {
+        if (confirm('Are you sure? This will permanently delete ALL data in the database.')) {
+            ['ss_products','ss_orders','ss_users','ss_settings','ss_currentUser','ss_db_v','ss_order_seq'].forEach(k => localStorage.removeItem(k));
+            alert('Database reset complete. Redirecting to store...');
+            window.location.href = '../index.html';
+        }
+    }
+</script>
+</body>
+</html>

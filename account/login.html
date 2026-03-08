@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Register - Silk Sutra</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .auth-container { max-width: 900px; margin: 0 auto; }
+        .auth-card { border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: none; }
+        .auth-bg { background-image: url('https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80'); background-size: cover; background-position: center; position: relative; }
+        .auth-bg::before { content: ''; position: absolute; inset: 0; background: linear-gradient(rgba(128,0,0,0.7), rgba(128,0,0,0.9)); }
+    </style>
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+
+    <nav class="navbar navbar-light bg-white py-3 border-bottom shadow-sm">
+        <div class="container justify-content-center">
+            <a class="navbar-brand text-primary fs-3" href="../index.html">
+                <i class="fas fa-dharmachakra text-secondary me-2"></i> Silk Sutra
+            </a>
+        </div>
+    </nav>
+
+    <div class="container py-5 flex-grow-1 d-flex align-items-center">
+        <div class="auth-container w-100">
+            <div class="card auth-card">
+                <div class="row g-0 h-100">
+                    <!-- Left: Background Image -->
+                    <div class="col-md-5 auth-bg d-none d-md-flex align-items-center justify-content-center p-5 text-center text-white relative">
+                        <div class="position-relative z-index-1">
+                            <i class="fas fa-gem fa-3x text-secondary mb-4"></i>
+                            <h2 class="font-heading fw-bold mb-3">Join Our Family</h2>
+                            <p class="mb-4">Create an account to track orders, save multiple addresses, and checkout faster.</p>
+                            <button class="btn btn-outline-light px-4 rounded-pill" onclick="toggleForms(true)">Sign Up</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Right: Forms -->
+                    <div class="col-md-7 p-4 p-lg-5 bg-white">
+                        
+                        <!-- Login Form -->
+                        <div id="loginFormSection">
+                            <h3 class="font-heading fw-bold text-primary mb-2">Welcome Back</h3>
+                            <p class="text-muted mb-4 pb-2 border-bottom">Sign in to your Silk Sutra account</p>
+                            
+                            <form>
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small fw-bold">Email Address</label>
+                                    <input type="email" class="form-control form-control-lg bg-light border-0 px-3" placeholder="Enter your email" required>
+                                </div>
+                                <div class="mb-4">
+                                    <div class="d-flex justify-content-between">
+                                        <label class="form-label text-muted small fw-bold">Password</label>
+                                        <a href="#" class="small text-decoration-none">Forgot password?</a>
+                                    </div>
+                                    <input type="password" class="form-control form-control-lg bg-light border-0 px-3" placeholder="Enter your password" required>
+                                </div>
+                                
+                                <button type="button" class="btn btn-primary btn-lg w-100 fw-bold py-3 mb-4 shadow-sm" onclick="login()">Sign In</button>
+                                
+                                <div class="text-center position-relative mb-4">
+                                    <hr class="text-muted">
+                                    <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted small">OR SIGN IN WITH</span>
+                                </div>
+                                
+                                <div class="d-flex justify-content-center gap-3">
+                                    <button type="button" class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                        <i class="fab fa-google text-danger fs-5"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                        <i class="fab fa-facebook-f text-primary fs-5"></i>
+                                    </button>
+                                </div>
+                                
+                                <div class="text-center mt-4 d-md-none">
+                                    <p class="text-muted">Don't have an account? <a href="#" onclick="toggleForms(true)" class="fw-bold text-decoration-none">Sign Up</a></p>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Register Form (Hidden by default) -->
+                        <div id="registerFormSection" style="display: none;">
+                            <h3 class="font-heading fw-bold text-primary mb-2">Create Account</h3>
+                            <p class="text-muted mb-4 pb-2 border-bottom">Experience premium shopping with Silk Sutra</p>
+                            
+                            <form>
+                                <div class="row g-3 mb-3">
+                                    <div class="col-sm-6">
+                                        <label class="form-label text-muted small fw-bold">First Name</label>
+                                        <input type="text" class="form-control bg-light border-0" required>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="form-label text-muted small fw-bold">Last Name</label>
+                                        <input type="text" class="form-control bg-light border-0" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small fw-bold">Email Address</label>
+                                    <input type="email" class="form-control bg-light border-0" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small fw-bold">Mobile Number</label>
+                                    <input type="tel" class="form-control bg-light border-0" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label text-muted small fw-bold">Password</label>
+                                    <input type="password" class="form-control bg-light border-0" required>
+                                    <div class="form-text small">Must be at least 8 characters long.</div>
+                                </div>
+                                
+                                <button type="button" class="btn btn-primary btn-lg w-100 fw-bold py-3 mb-4 shadow-sm" onclick="register()">Create Account</button>
+                                
+                                <div class="text-center mt-3 d-md-none">
+                                    <p class="text-muted">Already have an account? <a href="#" onclick="toggleForms(false)" class="fw-bold text-decoration-none">Sign In</a></p>
+                                </div>
+                                <div class="text-center mt-3 d-none d-md-block">
+                                    <p class="text-muted"><a href="#" onclick="toggleForms(false)" class="text-decoration-none"><i class="fas fa-arrow-left me-2"></i>Back to Sign In</a></p>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/db.js"></script>
+    <script>
+        // Track the inputs
+        const emailInput = document.querySelector('input[type="email"]');
+        const passwordInput = document.querySelector('input[type="password"]');
+
+        function toggleForms(showRegister) {
+            if(showRegister) {
+                document.getElementById('loginFormSection').style.display = 'none';
+                document.getElementById('registerFormSection').style.display = 'block';
+            } else {
+                document.getElementById('loginFormSection').style.display = 'block';
+                document.getElementById('registerFormSection').style.display = 'none';
+            }
+        }
+
+        function login() {
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+            
+            if (!email || !password) {
+                alert("Please enter both email and password.");
+                return;
+            }
+
+            const users = DB.getUsers();
+            const user = users.find(u => u.email === email && u.password === password);
+
+            if (user) {
+                // Save session (mocking actual auth)
+                localStorage.setItem('ss_currentUser', JSON.stringify(user));
+                
+                if (user.role === 'admin') {
+                    alert("Welcome back Admin! Redirecting to Dashboard...");
+                    window.location.href = '../admin/index.html';
+                } else {
+                    alert("Login successful! Redirecting to your account...");
+                    window.location.href = '../index.html'; // Or account/index.html
+                }
+            } else {
+                alert("Invalid email or password. For admin, use: admin@silksutra.com / password123");
+            }
+        }
+
+        function register() {
+            // Mock Register
+            alert("Account created successfully! Redirecting to homepage...");
+            window.location.href = '../index.html';
+        }
+    </script>
+</body>
+</html>

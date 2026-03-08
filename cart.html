@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - Silk Sutra</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg sticky-top py-3 border-bottom bg-white shadow-sm">
+        <div class="container d-flex justify-content-between">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-dharmachakra text-secondary me-2"></i> <span class="store-name">Silk Sutra</span>
+            </a>
+            <a class="btn btn-outline-primary rounded-pill px-4" href="shop.html">Continue Shopping</a>
+        </div>
+    </nav>
+
+    <div class="bg-primary py-4 text-center">
+        <h2 class="text-secondary font-heading mb-0">Your Shopping Cart</h2>
+    </div>
+
+    <section class="py-5">
+        <div class="container" id="cartContainer">
+            <div class="text-center my-5" id="cartLoading">
+                <div class="spinner-border text-primary" role="status"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EMPTY CART template -->
+    <template id="emptyCartTemplate">
+        <div class="text-center py-5">
+            <i class="fas fa-shopping-bag fa-4x text-muted mb-4 opacity-50"></i>
+            <h3 class="font-heading">Your cart is empty</h3>
+            <p class="text-muted mb-4">Looks like you haven't added any beautiful sarees yet.</p>
+            <a href="shop.html" class="btn btn-primary btn-lg px-5">Start Shopping</a>
+        </div>
+    </template>
+
+    <!-- FILLED CART template -->
+    <template id="filledCartTemplate">
+        <div class="row">
+            <!-- Cart Items -->
+            <div class="col-lg-8 mb-4 mb-lg-0">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-white border-bottom py-3">
+                        <h5 class="mb-0 fw-bold">Cart Items (<span id="cartCountHeader">0</span>)</h5>
+                    </div>
+                    <div class="card-body p-0" id="cartItemsList"></div>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="col-lg-4">
+                <div class="card shadow-sm border-0 sticky-top" style="top:100px;">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-4 font-heading border-bottom pb-3">Order Summary</h5>
+
+                        <div class="d-flex justify-content-between mb-3 text-muted">
+                            <span>Subtotal</span>
+                            <span id="subtotalVal">₹0</span>
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-3 pb-3 border-bottom" id="shippingRow">
+                            <span class="text-muted">Shipping</span>
+                            <span id="shippingVal" class="text-success fw-bold">FREE</span>
+                        </div>
+                        <p class="text-muted small mb-3" id="shippingNote">
+                            <i class="fas fa-truck me-1 text-success"></i>
+                            Free delivery on orders above ₹500!
+                        </p>
+
+                        <div class="d-flex justify-content-between mb-4">
+                            <span class="fw-bold fs-5">Total (INR)</span>
+                            <span class="fw-bold fs-5 text-primary" id="totalVal">₹0</span>
+                        </div>
+
+                        <!-- Login Gate: show if not logged in -->
+                        <div id="loginGate" style="display:none;">
+                            <div class="alert alert-warning py-2 text-center small mb-3">
+                                <i class="fas fa-lock me-1"></i>
+                                Please <a href="account/login.html" class="fw-bold text-primary">Login</a> to place your order.
+                            </div>
+                        </div>
+
+                        <a href="checkout.html" class="btn btn-primary w-100 py-3 fw-bold shadow" id="checkoutBtn">
+                            PROCEED TO CHECKOUT <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+
+                        <div class="text-center mt-4 pt-3 border-top">
+                            <p class="small text-muted mb-1"><i class="fas fa-lock me-1"></i> 100% Secure Checkout</p>
+                            <p class="small text-muted mb-0"><i class="fas fa-undo me-1"></i> Easy 7-day returns</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <footer class="py-3 bg-dark text-white mt-auto">
+        <div class="container text-center">
+            <p class="mb-0 text-white-50">&copy; 2026 <span class="store-name">Silk Sutra</span>. Secure Shopping.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        const SHIPPING_THRESHOLD = 500;
+        const SHIPPING_COST = 40;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCart();
+        });
+
+        function renderCart() {
+            let cart = JSON.parse(localStorage.getItem('silkSutraCart')) || [];
+            const container = document.getElementById('cartContainer');
+
+            if (cart.length === 0) {
+                container.innerHTML = document.getElementById('emptyCartTemplate').innerHTML;
+                return;
+            }
+
+            container.innerHTML = document.getElementById('filledCartTemplate').innerHTML;
+
+            let cartListHTML = '';
+            let subtotal = 0;
+
+            cart.forEach((item, index) => {
+                subtotal += item.price * item.qty;
+                cartListHTML += `
+                <div class="d-flex align-items-center justify-content-between p-4 border-bottom">
+                    <div class="d-flex align-items-center" style="width:50%;">
+                        <img src="${item.img}" alt="${item.name}" class="rounded me-3 border" style="width:80px;height:100px;object-fit:cover;">
+                        <div>
+                            <a href="product.html" class="fw-bold text-dark text-decoration-none d-block mb-1">${item.name}</a>
+                            <span class="text-muted small d-lg-none">₹${item.price.toLocaleString()}</span>
+                        </div>
+                    </div>
+                    <div class="d-none d-lg-block text-center" style="width:15%;">
+                        <span class="fw-bold text-muted">₹${item.price.toLocaleString()}</span>
+                    </div>
+                    <div class="d-flex align-items-center" style="width:25%;">
+                        <div class="input-group input-group-sm w-auto mx-auto shadow-sm rounded">
+                            <button class="btn btn-outline-secondary px-3" onclick="updateItemQty(${index}, -1)">-</button>
+                            <input type="text" class="form-control text-center px-0 bg-white" value="${item.qty}" style="max-width:40px;" readonly>
+                            <button class="btn btn-outline-secondary px-3" onclick="updateItemQty(${index}, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="text-end" style="width:10%;">
+                        <button class="btn btn-link text-danger p-0" onclick="removeItem(${index})"><i class="fas fa-trash-alt fs-5"></i></button>
+                    </div>
+                </div>`;
+            });
+
+            document.getElementById('cartItemsList').innerHTML = cartListHTML;
+            document.getElementById('cartCountHeader').textContent = cart.length;
+            document.getElementById('subtotalVal').textContent = '₹' + subtotal.toLocaleString();
+
+            // Shipping logic
+            const shippingCost = subtotal > SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
+            const total = subtotal + shippingCost;
+
+            const shippingValEl = document.getElementById('shippingVal');
+            const shippingNoteEl = document.getElementById('shippingNote');
+
+            if (shippingCost === 0) {
+                shippingValEl.textContent = 'FREE';
+                shippingValEl.className = 'text-success fw-bold';
+                shippingNoteEl.innerHTML = '<i class="fas fa-check-circle me-1 text-success"></i>You qualify for <strong>FREE delivery</strong>!';
+            } else {
+                shippingValEl.textContent = '₹' + SHIPPING_COST;
+                shippingValEl.className = 'text-dark fw-bold';
+                const remaining = SHIPPING_THRESHOLD - subtotal;
+                shippingNoteEl.innerHTML = `<i class="fas fa-truck me-1"></i>Add items worth <strong>₹${remaining}</strong> more for FREE delivery!`;
+            }
+
+            document.getElementById('totalVal').textContent = '₹' + total.toLocaleString();
+
+            // Login gate - require login to checkout
+            const currentUser = JSON.parse(localStorage.getItem('ss_currentUser'));
+            const loginGate   = document.getElementById('loginGate');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+
+            if (!currentUser) {
+                loginGate.style.display = 'block';
+                checkoutBtn.classList.add('disabled');
+                checkoutBtn.href = '#';
+                checkoutBtn.onclick = (e) => { e.preventDefault(); window.location.href = 'account/login.html'; };
+            } else {
+                loginGate.style.display = 'none';
+                checkoutBtn.classList.remove('disabled');
+                checkoutBtn.href = 'checkout.html';
+                checkoutBtn.onclick = null;
+            }
+        }
+
+        function updateItemQty(index, change) {
+            let cart = JSON.parse(localStorage.getItem('silkSutraCart')) || [];
+            if (cart[index] && cart[index].qty + change >= 1) {
+                cart[index].qty += change;
+                localStorage.setItem('silkSutraCart', JSON.stringify(cart));
+                renderCart();
+                if (typeof updateCartCount === 'function') updateCartCount();
+            }
+        }
+
+        function removeItem(index) {
+            let cart = JSON.parse(localStorage.getItem('silkSutraCart')) || [];
+            if (cart[index] && confirm('Remove this item from cart?')) {
+                cart.splice(index, 1);
+                localStorage.setItem('silkSutraCart', JSON.stringify(cart));
+                renderCart();
+                if (typeof updateCartCount === 'function') updateCartCount();
+            }
+        }
+    </script>
+</body>
+</html>

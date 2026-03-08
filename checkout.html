@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Checkout - Silk Sutra</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-light">
+
+    <!-- Header -->
+    <nav class="navbar navbar-light bg-white py-3 border-bottom shadow-sm">
+        <div class="container justify-content-center">
+            <a class="navbar-brand text-primary fs-3" href="index.html">
+                <i class="fas fa-dharmachakra text-secondary me-2"></i>
+                <span class="store-name">Silk Sutra</span> Checkout
+            </a>
+        </div>
+    </nav>
+
+    <!-- Progress Steps -->
+    <div class="container py-4">
+        <div class="d-flex justify-content-center mb-5 mt-3 position-relative">
+            <div class="progress w-75 position-absolute" style="top:15px;height:3px;z-index:1;">
+                <div class="progress-bar bg-primary" style="width:50%"></div>
+            </div>
+            <div class="d-flex w-75 justify-content-between position-relative" style="z-index:2;">
+                <div class="text-center">
+                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-2" style="width:35px;height:35px;"><i class="fas fa-check"></i></div>
+                    <span class="small fw-bold">Cart</span>
+                </div>
+                <div class="text-center">
+                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-2" style="width:35px;height:35px;">2</div>
+                    <span class="small fw-bold text-primary">Delivery Details</span>
+                </div>
+                <div class="text-center opacity-50">
+                    <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center mx-auto mb-2" style="width:35px;height:35px;">3</div>
+                    <span class="small fw-bold">Confirmation</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Form -->
+            <div class="col-lg-7 mb-4">
+                <div class="card border-0 shadow-sm p-4">
+
+                    <!-- Not logged in warning -->
+                    <div id="notLoggedInWarn" class="alert alert-warning d-none">
+                        <i class="fas fa-lock me-2"></i> Please <a href="account/login.html" class="fw-bold">Login</a> before placing an order.
+                    </div>
+
+                    <h4 class="font-heading mb-4 pb-2 border-bottom">Contact & Delivery</h4>
+                    <form id="checkoutForm">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Email / Phone *</label>
+                            <input type="text" id="chkContact" class="form-control" placeholder="email@example.com or 9876543210" required>
+                        </div>
+                        <h5 class="mt-3 mb-3 fw-bold">Shipping Address</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">First Name *</label>
+                                <input type="text" id="chKFName" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Last Name *</label>
+                                <input type="text" id="chkLName" class="form-control" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Full Address *</label>
+                                <input type="text" id="chkAddress" class="form-control" placeholder="House No, Street, Landmark" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">City *</label>
+                                <input type="text" id="chkCity" class="form-control" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">State *</label>
+                                <select id="chkState" class="form-select" required>
+                                    <option value="" selected disabled>Choose...</option>
+                                    <option>Andhra Pradesh</option>
+                                    <option>Bihar</option>
+                                    <option>Delhi</option>
+                                    <option>Gujarat</option>
+                                    <option>Karnataka</option>
+                                    <option>Kerala</option>
+                                    <option>Madhya Pradesh</option>
+                                    <option>Maharashtra</option>
+                                    <option>Punjab</option>
+                                    <option>Rajasthan</option>
+                                    <option>Tamil Nadu</option>
+                                    <option>Telangana</option>
+                                    <option>Uttar Pradesh</option>
+                                    <option>West Bengal</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">PIN Code *</label>
+                                <input type="text" id="chkPin" class="form-control" maxlength="6" pattern="\d{6}" placeholder="600001" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" id="placeOrderBtn" class="btn btn-primary btn-lg w-100 mt-4 py-3 fw-bold shadow">
+                            <i class="fas fa-check-circle me-2"></i> Place Order
+                        </button>
+                        <p class="small text-muted text-center mt-3 mb-0">
+                            <i class="fas fa-lock me-1"></i> 100% Secure. Your data is safe with us.
+                        </p>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Order Summary Sidebar -->
+            <div class="col-lg-5">
+                <div class="card border-0 shadow-sm bg-white p-4 sticky-top" style="top:20px;">
+                    <h5 class="fw-bold mb-4 pb-3 border-bottom">Order Summary</h5>
+                    <div id="checkoutItemsList" class="mb-3" style="max-height:300px;overflow-y:auto;"></div>
+                    <div class="border-top pt-3">
+                        <div class="d-flex justify-content-between mb-2 text-muted">
+                            <span>Subtotal</span>
+                            <span id="checkoutSubtotal">₹0</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2 text-muted">
+                            <span>Shipping</span>
+                            <span id="checkoutShipping" class="text-success">FREE</span>
+                        </div>
+                        <div class="d-flex justify-content-between fw-bold fs-5 mt-2 border-top pt-2">
+                            <span>Total</span>
+                            <span class="text-primary" id="checkoutTotal">₹0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        const SHIPPING_THRESHOLD = 500;
+        const SHIPPING_COST = 40;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Require login
+            const currentUser = JSON.parse(localStorage.getItem('ss_currentUser'));
+            if (!currentUser) {
+                document.getElementById('notLoggedInWarn').classList.remove('d-none');
+                document.getElementById('placeOrderBtn').disabled = true;
+            } else {
+                // Pre-fill contact from logged-in user
+                document.getElementById('chkContact').value = currentUser.email || '';
+                const nameParts = (currentUser.name || '').split(' ');
+                document.getElementById('chKFName').value = nameParts[0] || '';
+                document.getElementById('chkLName').value = nameParts.slice(1).join(' ') || '';
+            }
+
+            let cart = JSON.parse(localStorage.getItem('silkSutraCart')) || [];
+            if (cart.length === 0) {
+                window.location.href = 'cart.html';
+                return;
+            }
+
+            // Render items
+            let listHTML = '';
+            let subtotal = 0;
+            cart.forEach(item => {
+                subtotal += item.price * item.qty;
+                listHTML += `
+                <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
+                    <div class="position-relative me-3">
+                        <img src="${item.img}" class="rounded border" style="width:65px;height:80px;object-fit:cover;">
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary border border-white" style="font-size:0.75rem;">${item.qty}</span>
+                    </div>
+                    <div class="flex-grow-1">
+                        <p class="mb-0 fw-bold small">${item.name}</p>
+                    </div>
+                    <div class="ms-3 text-end">
+                        <p class="mb-0 fw-bold">₹${(item.price * item.qty).toLocaleString()}</p>
+                    </div>
+                </div>`;
+            });
+
+            const shippingCost = subtotal > SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
+            const total = subtotal + shippingCost;
+
+            document.getElementById('checkoutItemsList').innerHTML = listHTML;
+            document.getElementById('checkoutSubtotal').textContent = '₹' + subtotal.toLocaleString();
+            document.getElementById('checkoutShipping').textContent = shippingCost === 0 ? 'FREE' : '₹' + SHIPPING_COST;
+            document.getElementById('checkoutShipping').className = shippingCost === 0 ? 'text-success fw-bold' : 'fw-bold';
+            document.getElementById('checkoutTotal').textContent = '₹' + total.toLocaleString();
+
+            // Submit
+            document.getElementById('checkoutForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                const newOrder = {
+                    customerName: document.getElementById('chKFName').value + ' ' + document.getElementById('chkLName').value,
+                    contact:      document.getElementById('chkContact').value,
+                    address:      document.getElementById('chkAddress').value + ', ' + document.getElementById('chkCity').value + ', ' + document.getElementById('chkState').value + ' - ' + document.getElementById('chkPin').value,
+                    total:        total,
+                    status:       'Processing',
+                    items:        cart.map(i => ({ productId: i.id, name: i.name, qty: i.qty, price: i.price, img: i.img }))
+                };
+                DB.addOrder(newOrder);
+                localStorage.removeItem('silkSutraCart');
+                window.location.href = 'confirmation.html';
+            });
+        });
+    </script>
+</body>
+</html>

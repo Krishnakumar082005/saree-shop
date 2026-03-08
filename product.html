@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crimson Pure Silk Saree - Silk Sutra</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .thumbnail-gallery img { cursor: pointer; border: 2px solid transparent; width: 80px; height: 100px; object-fit: cover; margin-right: 10px; }
+        .thumbnail-gallery img.active { border-color: var(--primary-color); }
+        .product-main-img { width: 100%; height: 600px; object-fit: cover; }
+        .color-variant { width: 30px; height: 30px; border-radius: 50%; display: inline-block; margin-right: 10px; cursor: pointer; border: 2px solid white; outline: 1px solid #ddd; }
+        .color-variant.active { outline: 2px solid var(--primary-color); }
+    </style>
+</head>
+<body>
+
+    <!-- Header (simplified placeholder, assuming main styling works) -->
+    <nav class="navbar navbar-expand-lg sticky-top py-3">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-dharmachakra text-secondary me-2"></i> Silk Sutra
+            </a>
+            <div class="d-flex align-items-center ms-auto fs-5">
+                <a href="cart.html" class="text-primary position-relative">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-accent cart-count" style="font-size: 0.6rem;">0</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="container mt-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html" class="text-muted text-decoration-none">Home</a></li>
+                <li class="breadcrumb-item"><a href="shop.html" class="text-muted text-decoration-none">Shop</a></li>
+                <li class="breadcrumb-item"><a href="shop.html?category=silk" class="text-muted text-decoration-none">Pure Silk</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Crimson Pure Silk Saree</li>
+            </ol>
+        </nav>
+    </div>
+
+    <!-- Product Section -->
+    <section class="py-4">
+        <div class="container">
+            <div class="row">
+                <!-- Product Images -->
+                <div class="col-lg-6 mb-5 mb-lg-0">
+                    <div class="mb-3 position-relative">
+                        <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80" id="mainImage" alt="Crimson Pure Silk Saree" class="product-main-img rounded">
+                    </div>
+                    <div class="thumbnail-gallery d-flex">
+                        <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=200&q=80" alt="Thumb 1" class="active" onclick="changeImage(this)">
+                        <img src="https://images.unsplash.com/photo-1595777457583-95e059f581ce?auto=format&fit=crop&w=200&q=80" alt="Thumb 2" onclick="changeImage(this)">
+                        <img src="https://images.unsplash.com/photo-1583391733975-fc5f5cfeb504?auto=format&fit=crop&w=200&q=80" alt="Thumb 3" onclick="changeImage(this)">
+                    </div>
+                </div>
+
+                <!-- Product Details -->
+                <div class="col-lg-6">
+                    <div class="ps-lg-4">
+                        <h2 class="font-heading fw-bold mb-2">Crimson Pure Kanjeevaram Silk Saree</h2>
+                        
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="text-warning me-2">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <span class="text-muted">(42 Student Reviews)</span>
+                        </div>
+
+                        <div class="mb-4">
+                            <h3 class="text-primary fw-bold mb-0">₹8,500 <span class="fs-5 text-muted text-decoration-line-through ms-2">₹10,000</span></h3>
+                            <p class="text-success fw-bold small">Inclusive of all taxes</p>
+                        </div>
+
+                        <p class="mb-4 text-muted">A stunning crimson red pure kanjeevaram silk saree featuring intricate zari work and a traditional border. Handwoven with love, this masterpiece is a quintessential addition to your bridal or festive wardrobe.</p>
+
+                        <!-- Colors -->
+                        <div class="mb-4">
+                            <h6 class="fw-bold">Color Options</h6>
+                            <div class="d-flex mt-2">
+                                <div class="color-variant active" style="background-color: #800000;" title="Crimson Red"></div>
+                                <div class="color-variant" style="background-color: #006400;" title="Emerald Green"></div>
+                                <div class="color-variant" style="background-color: #FFD700;" title="Golden Yellow"></div>
+                            </div>
+                        </div>
+
+                        <!-- Blouse Size -->
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between align-items-end mb-2">
+                                <h6 class="fw-bold mb-0">Blouse Stitching</h6>
+                                <a href="#" class="small text-muted text-decoration-underline">Size Guide</a>
+                            </div>
+                            <select class="form-select w-50">
+                                <option selected>Unstitched (Included)</option>
+                                <option value="34">Size 34 (₹500)</option>
+                                <option value="36">Size 36 (₹500)</option>
+                                <option value="38">Size 38 (₹500)</option>
+                            </select>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="d-flex align-items-center gap-3 mb-4 mt-5">
+                            <div class="input-group" style="width: 120px;">
+                                <button class="btn btn-outline-secondary" type="button" onclick="updateQty(-1)">-</button>
+                                <input type="text" class="form-control text-center" id="qtyInput" value="1" readonly>
+                                <button class="btn btn-outline-secondary" type="button" onclick="updateQty(1)">+</button>
+                            </div>
+                            <button class="btn btn-primary flex-grow-1 py-2 fs-5 add-to-cart-btn" data-id="p1" data-name="Crimson Pure Silk Saree" data-price="8500" data-img="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=400&q=80">
+                                <i class="fas fa-shopping-cart me-2"></i> Add to Cart
+                            </button>
+                            <button class="btn btn-outline-primary py-2 px-3" title="Add to Wishlist"><i class="far fa-heart fs-5"></i></button>
+                        </div>
+
+                        <hr>
+
+                        <!-- Features -->
+                        <div class="row text-center mt-4">
+                            <div class="col-4">
+                                <i class="fas fa-shield-alt text-secondary fa-2x mb-2"></i>
+                                <p class="small text-muted mb-0">Authentic Fabric</p>
+                            </div>
+                            <div class="col-4 border-start border-end">
+                                <i class="fas fa-sync text-secondary fa-2x mb-2"></i>
+                                <p class="small text-muted mb-0">7 Days Return</p>
+                            </div>
+                            <div class="col-4">
+                                <i class="fas fa-truck text-secondary fa-2x mb-2"></i>
+                                <p class="small text-muted mb-0">Fast Delivery</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tabs Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <ul class="nav nav-tabs border-bottom-0 justify-content-center mb-4" id="productTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active fw-bold px-4" id="desc-tab" data-bs-toggle="tab" data-bs-target="#desc" type="button" role="tab" aria-selected="true">Description</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link fw-bold px-4" id="spec-tab" data-bs-toggle="tab" data-bs-target="#spec" type="button" role="tab" aria-selected="false">Specifications</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link fw-bold px-4" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab" aria-selected="false">Reviews (42)</button>
+                </li>
+            </ul>
+            <div class="tab-content bg-white p-4 p-md-5 border rounded shadow-sm" id="productTabContent">
+                <div class="tab-pane fade show active" id="desc" role="tabpanel">
+                    <p>Elevate your ethnic wardrobe with this majestic Crimson Red Pure Kanjeevaram Silk Saree. Handwoven by master artisans using traditional techniques passed down through generations, this saree features a rich gold zari border and pallu adorned with intricate peacock motifs.</p>
+                    <p>The luxurious drape and deep, resplendent color make it an impeccable choice for weddings, receptions, and grand festivities. Accompanying the saree is an unstitched matching blouse piece that ties the entire regal look together.</p>
+                </div>
+                <div class="tab-pane fade" id="spec" role="tabpanel">
+                    <table class="table table-bordered mb-0">
+                        <tbody>
+                            <tr><th class="bg-light" style="width: 30%">Fabric</th><td>Pure Kanjeevaram Silk</td></tr>
+                            <tr><th class="bg-light">Occasion</th><td>Bridal, Festival, Party</td></tr>
+                            <tr><th class="bg-light">Pattern</th><td>Zari Woven</td></tr>
+                            <tr><th class="bg-light">Saree Length</th><td>5.5 Meters</td></tr>
+                            <tr><th class="bg-light">Blouse Piece</th><td>0.8 Meters (Unstitched)</td></tr>
+                            <tr><th class="bg-light">Wash Care</th><td>Dry Clean Only</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="reviews" role="tabpanel">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4 class="mb-0">Customer Reviews</h4>
+                        <button class="btn btn-outline-primary btn-sm">Write a Review</button>
+                    </div>
+                    <!-- Single Review -->
+                    <div class="border-bottom pb-3 mb-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="text-warning me-2"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                            <span class="fw-bold me-2">Swati R.</span> <span class="badge bg-success small"><i class="fas fa-check-circle me-1"></i>Verified Buyer</span>
+                        </div>
+                        <h6 class="fw-bold">Absolutely Stunning!</h6>
+                        <p class="text-muted mb-1">The saree looks exactly as shown in the pictures. The quality of the silk and the detailing of the zari work are phenomenal. Wore it to a wedding and received countless compliments.</p>
+                        <small class="text-muted">October 15, 2026</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        function changeImage(element) {
+            document.getElementById('mainImage').src = element.src;
+            document.querySelectorAll('.thumbnail-gallery img').forEach(img => img.classList.remove('active'));
+            element.classList.add('active');
+        }
+        function updateQty(change) {
+            let input = document.getElementById('qtyInput');
+            let current = parseInt(input.value);
+            if(current + change >= 1) {
+                input.value = current + change;
+            }
+        }
+    </script>
+</body>
+</html>

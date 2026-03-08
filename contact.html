@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Silk Sutra</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav class="navbar navbar-expand-lg sticky-top py-3">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-dharmachakra text-secondary me-2"></i> Silk Sutra
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 fw-bold">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="shop.html">Shop</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">Our Story</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="contact.html">Contact</a></li>
+                </ul>
+                <div class="d-flex align-items-center fs-5">
+                    <a href="cart.html" class="text-primary position-relative">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-accent cart-count" style="font-size: 0.6rem;">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="bg-primary text-center py-5">
+        <div class="container">
+            <h1 class="text-secondary display-4 fw-bold font-heading mb-3">Get In Touch</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb justify-content-center m-0">
+                    <li class="breadcrumb-item"><a href="index.html" class="text-white-50 text-decoration-none">Home</a></li>
+                    <li class="breadcrumb-item active text-white" aria-current="page">Contact Us</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <section class="py-5">
+        <div class="container">
+            <div class="row g-5">
+                <!-- Contact Info Cards -->
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm p-4 mb-4 text-center h-100">
+                        <i class="fas fa-map-marker-alt fa-3x text-primary mb-3"></i>
+                        <h5 class="fw-bold font-heading">Our Store</h5>
+                        <p class="text-muted mb-0">123 Heritage Lane, Craft Bazaar<br>New Delhi, Delhi 110001, India</p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm p-4 mb-4 text-center h-100">
+                        <i class="fas fa-phone-alt fa-3x text-primary mb-3"></i>
+                        <h5 class="fw-bold font-heading">Call Us</h5>
+                        <p class="text-muted mb-0">Sales: +91 98765 43210<br>Support: +91 98765 43211</p>
+                        <small class="text-muted">Mon-Sat, 9AM to 6PM</small>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm p-4 mb-4 text-center h-100">
+                        <i class="fas fa-envelope fa-3x text-primary mb-3"></i>
+                        <h5 class="fw-bold font-heading">Email Us</h5>
+                        <p class="text-muted mb-0">info@silksutra.com<br>care@silksutra.com</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-5 g-5">
+                <!-- Contact Form -->
+                <div class="col-lg-6">
+                    <h3 class="font-heading fw-bold mb-4">Send Us a Message</h3>
+                    <p class="text-muted mb-4">Have questions about a product, shipping, or returns? Fill out the form below and our team will get back to you within 24 hours.</p>
+                    
+                    <form id="contactForm">
+                        <div class="row g-3">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" class="form-control" placeholder="Your Name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" class="form-control" placeholder="your@email.com" required>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label class="form-label">Subject</label>
+                                <select class="form-select" required>
+                                    <option value="" selected disabled>Choose a topic...</option>
+                                    <option>Order Inquiry</option>
+                                    <option>Product Information</option>
+                                    <option>Returns & Exchange</option>
+                                    <option>Bulk/Wholesale Inquiry</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                            <div class="col-12 mb-4">
+                                <label class="form-label">Message</label>
+                                <textarea class="form-control" rows="5" placeholder="How can we help you?" required></textarea>
+                            </div>
+                            <div class="col-12">
+                                <button type="button" class="btn btn-primary btn-lg px-5 border-0" onclick="alert('Message sent successfully! We will contact you soon.'); this.form.reset();">Submit Message</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Map & FAQ Link -->
+                <div class="col-lg-6">
+                    <div class="rounded overflow-hidden shadow-sm h-100" style="min-height: 400px; background-color: #e9ecef;">
+                        <!-- Embed Google Maps mock iframe -->
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1m3!1d224345.83923363406!2d77.0688975!3d28.527582!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfd5b347eb62d%3A0x52c2b7494e204dce!2sNew%20Delhi%2C%20Delhi%2C%20India!5e0!3m2!1sen!2sus!4v1680193425178!5m2!1sen!2sus" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Frequently Asked Questions -->
+            <div class="row mt-5 pt-5 border-top">
+                <div class="col-12 text-center mb-5">
+                    <h2 class="font-heading fw-bold">Frequently Asked Questions</h2>
+                    <p class="text-muted">Find quick answers to common queries</p>
+                </div>
+                
+                <div class="col-lg-8 mx-auto accordion" id="faqAccordion">
+                    <div class="accordion-item shadow-sm mb-3 border-0 rounded">
+                        <h2 class="accordion-header" id="faq-headingOne">
+                            <button class="accordion-button collapsed fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#faq-collapseOne" aria-expanded="false" aria-controls="faq-collapseOne">
+                                How can I track my order?
+                            </button>
+                        </h2>
+                        <div id="faq-collapseOne" class="accordion-collapse collapse" aria-labelledby="faq-headingOne" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body text-muted">
+                                Once your order is shipped, you will receive an email with the tracking number and courier details. You can also track your order in the "My Account" section or by entering your order number on our Track Order page.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item shadow-sm mb-3 border-0 rounded">
+                        <h2 class="accordion-header" id="faq-headingTwo">
+                            <button class="accordion-button collapsed fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#faq-collapseTwo" aria-expanded="false" aria-controls="faq-collapseTwo">
+                                What is your return policy?
+                            </button>
+                        </h2>
+                        <div id="faq-collapseTwo" class="accordion-collapse collapse" aria-labelledby="faq-headingTwo" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body text-muted">
+                                We offer a 7-day hassle-free return policy. The saree must be unworn, unwashed, and have all original tags intact. Blouse pieces that have been stitched or separated from the saree are non-returnable. To initiate a return, visit the Returns & Exchanges page.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item shadow-sm mb-3 border-0 rounded">
+                        <h2 class="accordion-header" id="faq-headingThree">
+                            <button class="accordion-button collapsed fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#faq-collapseThree" aria-expanded="false" aria-controls="faq-collapseThree">
+                                Are the sarees handwoven?
+                            </button>
+                        </h2>
+                        <div id="faq-collapseThree" class="accordion-collapse collapse" aria-labelledby="faq-headingThree" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body text-muted">
+                                Yes, the exquisite Kanjeevarams, Banarasis, and Chanderis featured in our classic collections are 100% handwoven by authentic artisans. We also offer standard printed silks and georgettes for daily wear, clearly described on product pages.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="pt-5 pb-3 bg-primary text-white mt-auto">
+        <div class="container text-center">
+            <p class="mb-0 text-white-50">&copy; 2026 Silk Sutra.</p>
+        </div>
+    </footer>
+
+    <!-- Live Chat Mock Widget -->
+    <div class="position-fixed bottom-0 end-0 m-4 shadow-lg rounded-circle bg-secondary d-flex align-items-center justify-content-center cursor-pointer" style="width: 60px; height: 60px; z-index: 1000;" title="Live Chat">
+        <i class="fas fa-comment-dots text-primary fa-2x"></i>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

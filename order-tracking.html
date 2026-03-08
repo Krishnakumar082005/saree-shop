@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Order - Silk Sutra</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .tracking-timeline { position: relative; max-width: 600px; margin: 0 auto; padding-left: 50px; }
+        .tracking-timeline::before { content: ''; position: absolute; left: 19px; top: 0; bottom: 0; width: 2px; background: #e9ecef; }
+        .timeline-step { position: relative; margin-bottom: 30px; }
+        .timeline-step .dot { position: absolute; left: -39px; top: 0; width: 16px; height: 16px; border-radius: 50%; background: #e9ecef; border: 3px solid #fff; box-shadow: 0 0 0 2px #e9ecef; z-index: 2; }
+        .timeline-step.active .dot { background: var(--primary-color); box-shadow: 0 0 0 2px var(--primary-color); }
+        .timeline-step.completed .dot { background: var(--primary-color); box-shadow: 0 0 0 2px var(--primary-color); }
+        .timeline-step.completed::before { content: '\f00c'; font-family: 'Font Awesome 5 Free'; font-weight: 900; position: absolute; left: -36px; top: 1px; color: #fff; font-size: 8px; z-index: 3; }
+        .tracking-card { border-radius: 12px; border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+    </style>
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+
+    <!-- Top Bar & Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top py-3 bg-white shadow-sm border-bottom">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-dharmachakra text-secondary me-2"></i> Silk Sutra
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fw-bold me-4">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="shop.html">Shop</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                </ul>
+                <div class="d-flex align-items-center gap-3 fs-5">
+                    <a href="account/index.html" class="text-primary" title="My Account"><i class="far fa-user"></i></a>
+                    <a href="cart.html" class="text-primary position-relative" title="Cart">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-accent cart-count" style="font-size:0.6rem;">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="container py-5 flex-grow-1">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <!-- Search Form -->
+                <div class="card tracking-card p-4 p-md-5 mb-4 text-center">
+                    <div class="mx-auto bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
+                        <i class="fas fa-map-marked-alt fa-2x"></i>
+                    </div>
+                    <h2 class="font-heading fw-bold mb-2">Track Your Order</h2>
+                    <p class="text-muted mb-4">Enter your order ID (e.g. ORD-001) below to see its current status in real-time.</p>
+                    
+                    <form id="trackForm" class="mx-auto" style="max-width: 400px;">
+                        <div class="input-group input-group-lg mb-3 shadow-sm">
+                            <input type="text" id="orderIdInput" class="form-control border-end-0 border" placeholder="ORD-001" required>
+                            <button class="btn border border-start-0 bg-white" type="submit">
+                                <i class="fas fa-search text-primary"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Result Area -->
+                <div id="trackingResult" class="card tracking-card p-4 p-md-5 d-none">
+                    <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
+                        <div>
+                            <span class="text-muted small d-block">ORDER ID</span>
+                            <h5 class="fw-bold mb-0 text-primary" id="tOrderId">ORD-001</h5>
+                        </div>
+                        <div class="text-end">
+                            <span class="text-muted small d-block">STATUS</span>
+                            <span class="badge bg-primary px-3 py-2 rounded-pill" id="tStatusBadge">Processing</span>
+                        </div>
+                    </div>
+
+                    <div class="tracking-timeline" id="tTimeline">
+                        <!-- Filled by JS -->
+                    </div>
+
+                    <div class="bg-light rounded p-3 mt-4 text-center" id="tTotalBox">
+                        <span class="text-muted small">Total Paid: </span>
+                        <strong class="text-primary fs-5 ms-2" id="tTotalAmount">₹0</strong>
+                    </div>
+                </div>
+
+                <!-- Error Message -->
+                <div id="trackingError" class="alert alert-danger d-none text-center shadow-sm">
+                    <i class="fas fa-exclamation-circle me-2"></i> Order not found. Please check your Order ID and try again.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-4 bg-dark text-white mt-auto">
+        <div class="container text-center">
+            <p class="mb-0 text-white-50">&copy; 2026 <span class="store-name">Silk Sutra</span>. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        document.getElementById('trackForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const oid = document.getElementById('orderIdInput').value.trim().toUpperCase();
+            const orders = DB.getOrders();
+            const order = orders.find(o => o.id === oid);
+
+            const resultDiv = document.getElementById('trackingResult');
+            const errorDiv = document.getElementById('trackingError');
+
+            if (!order) {
+                resultDiv.classList.add('d-none');
+                errorDiv.classList.remove('d-none');
+                return;
+            }
+
+            errorDiv.classList.add('d-none');
+            resultDiv.classList.remove('d-none');
+
+            // Populate data
+            document.getElementById('tOrderId').textContent = order.id;
+            document.getElementById('tTotalAmount').textContent = '₹' + (order.total || 0).toLocaleString();
+
+            const badge = document.getElementById('tStatusBadge');
+            badge.textContent = order.status;
+            badge.className = 'badge px-3 py-2 rounded-pill ';
+            if(order.status === 'Processing') badge.className += 'bg-warning text-dark';
+            else if(order.status === 'Shipped') badge.className += 'bg-primary';
+            else if(order.status === 'Delivered') badge.className += 'bg-success';
+            else badge.className += 'bg-secondary';
+
+            // Build Timeline
+            const orderDateStr = new Date(order.date).toLocaleDateString('en-IN', {month:'short', day:'numeric', year:'numeric'});
+            
+            let tHtml = `
+            <div class="timeline-step completed">
+                <div class="dot"></div>
+                <h6 class="fw-bold mb-1">Order Placed</h6>
+                <p class="text-muted small mb-0">${orderDateStr}</p>
+            </div>`;
+
+            if (order.status === 'Processing') {
+                tHtml += `
+                <div class="timeline-step active">
+                    <div class="dot"></div>
+                    <h6 class="fw-bold text-primary mb-1">Processing</h6>
+                    <p class="text-muted small mb-0">We are preparing your beautiful saree.</p>
+                </div>
+                <div class="timeline-step">
+                    <div class="dot"></div>
+                    <h6 class="text-muted fw-bold mb-1">Shipped</h6>
+                </div>
+                <div class="timeline-step text-muted">
+                    <div class="dot"></div>
+                    <h6 class="fw-bold mb-1">Delivered</h6>
+                </div>`;
+            } else if (order.status === 'Shipped') {
+                tHtml += `
+                <div class="timeline-step completed">
+                    <div class="dot"></div>
+                    <h6 class="fw-bold text-primary mb-1">Processing</h6>
+                    <p class="text-muted small mb-0">Order was packed.</p>
+                </div>
+                <div class="timeline-step active">
+                    <div class="dot"></div>
+                    <h6 class="fw-bold text-primary mb-1">Shipped</h6>
+                    <p class="text-muted small mb-0">Your package is on the way via Ekart.</p>
+                </div>
+                <div class="timeline-step text-muted">
+                    <div class="dot"></div>
+                    <h6 class="fw-bold mb-1">Delivered</h6>
+                </div>`;
+            } else if (order.status === 'Delivered') {
+                tHtml += `
+                <div class="timeline-step completed">
+                    <div class="dot"></div>
+                    <h6 class="fw-bold mb-1">Processing</h6>
+                </div>
+                <div class="timeline-step completed">
+                    <div class="dot"></div>
+                    <h6 class="fw-bold mb-1">Shipped</h6>
+                </div>
+                <div class="timeline-step completed border-0">
+                    <div class="dot"></div>
+                    <h6 class="fw-bold text-success mb-1">Delivered</h6>
+                    <p class="text-muted small mb-0">Package successfully delivered!</p>
+                </div>`;
+            } else {
+                tHtml += `
+                <div class="timeline-step active">
+                    <div class="dot"></div>
+                    <h6 class="fw-bold mb-1">${order.status}</h6>
+                </div>`;
+            }
+
+            document.getElementById('tTimeline').innerHTML = tHtml;
+        });
+
+        // Auto-check if URL parameter is passed
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const oid = params.get('id');
+            if (oid) {
+                document.getElementById('orderIdInput').value = oid;
+                document.getElementById('trackForm').dispatchEvent(new Event('submit'));
+            }
+        });
+    </script>
+</body>
+</html>

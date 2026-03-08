@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Silk Sutra</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #f4f6f9; }
+        .sidebar { min-height: 100vh; background-color: #343a40; color: #fff; position: sticky; top: 0; }
+        .sidebar a { color: #c2c7d0; text-decoration: none; padding: 10px 15px; display: block; border-radius: 5px; margin-bottom: 5px; transition: all 0.2s; }
+        .sidebar a:hover, .sidebar a.active { background-color: #007bff; color: #fff; }
+        .stat-card { border-radius: 12px; border: none; box-shadow: 0 2px 12px rgba(0,0,0,0.08); transition: transform 0.2s; cursor:pointer;}
+        .stat-card:hover { transform: translateY(-3px); }
+        .stat-icon { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+        #sidebarStoreName { font-size: 1.1rem; }
+    </style>
+</head>
+<body>
+<div class="d-flex">
+    <!-- Sidebar -->
+    <div class="sidebar p-3" style="width:250px; min-height:100vh;">
+        <div class="text-center mb-4">
+            <i class="fas fa-dharmachakra fa-2x text-warning mb-2"></i>
+            <h5 class="fw-bold mb-0" id="sidebarStoreName">Silk Sutra Admin</h5>
+        </div>
+        <a href="index.html" class="active"><i class="fas fa-tachometer-alt me-2"></i> Dashboard</a>
+        <a href="products.html"><i class="fas fa-box me-2"></i> Products</a>
+        <a href="orders.html"><i class="fas fa-shopping-cart me-2"></i> Orders <span class="badge bg-danger ms-2" id="navOrderCount">0</span></a>
+        <a href="customers.html"><i class="fas fa-users me-2"></i> Customers</a>
+        <a href="settings.html"><i class="fas fa-cog me-2"></i> Settings</a>
+        <hr class="border-secondary my-4">
+        <a href="../index.html"><i class="fas fa-store me-2"></i> View Store</a>
+        <a href="../account/login.html" onclick="localStorage.removeItem('ss_currentUser')"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-grow-1">
+        <!-- Top Nav -->
+        <nav class="navbar navbar-expand bg-white shadow-sm px-4 py-3 mb-4">
+            <form class="d-flex w-50">
+                <input class="form-control rounded-pill bg-light border-0" type="search" placeholder="Search orders, products...">
+            </form>
+            <div class="ms-auto d-flex align-items-center gap-3">
+                <button class="btn btn-link text-dark position-relative p-0" id="bellBtn" title="Notifications" onclick="toggleNotifications()">
+                    <i class="far fa-bell fs-5"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="bellBadge" style="font-size:0.6rem;">0</span>
+                </button>
+                <!-- Notification dropdown -->
+                <div id="notifDropdown" class="card border-0 shadow position-absolute" style="display:none;top:70px;right:20px;width:300px;z-index:9999;">
+                    <div class="card-header bg-white fw-bold border-bottom py-2">Notifications</div>
+                    <div class="card-body p-0" id="notifList" style="max-height:300px;overflow-y:auto;"></div>
+                </div>
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown">
+                        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2" style="width:35px;height:35px;font-weight:700;" id="adminInitials">A</div>
+                        <strong id="adminName">Admin</strong>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                        <li><a class="dropdown-item" href="settings.html"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="../account/login.html" onclick="localStorage.removeItem('ss_currentUser')"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container-fluid px-4">
+            <h3 class="fw-bold mb-4">Dashboard Overview</h3>
+
+            <!-- Top Stats - clickable to navigate -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-3">
+                    <div class="card stat-card p-3" onclick="window.location='orders.html'" title="View Orders">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-muted mb-1">Total Revenue</h6>
+                                <h3 class="fw-bold mb-0 text-primary" id="statRevenue">₹0</h3>
+                            </div>
+                            <div class="stat-icon bg-primary bg-opacity-10 text-primary"><i class="fas fa-rupee-sign"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stat-card p-3" onclick="window.location='orders.html'" title="View Orders">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-muted mb-1">Total Orders</h6>
+                                <h3 class="fw-bold mb-0 text-success" id="statOrders">0</h3>
+                            </div>
+                            <div class="stat-icon bg-success bg-opacity-10 text-success"><i class="fas fa-shopping-bag"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stat-card p-3" onclick="window.location='customers.html'" title="View Customers">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-muted mb-1">Total Users</h6>
+                                <h3 class="fw-bold mb-0 text-warning" id="statUsers">0</h3>
+                            </div>
+                            <div class="stat-icon bg-warning bg-opacity-10 text-warning"><i class="fas fa-users"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stat-card p-3" onclick="window.location='products.html'" title="View Products">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-muted mb-1">Total Products</h6>
+                                <h3 class="fw-bold mb-0 text-danger" id="statProducts">0</h3>
+                            </div>
+                            <div class="stat-icon bg-danger bg-opacity-10 text-danger"><i class="fas fa-box"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4 mb-4">
+                <!-- Recent Orders -->
+                <div class="col-lg-8">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0 fw-bold">Recent Orders</h5>
+                            <a href="orders.html" class="btn btn-sm btn-outline-primary">View All</a>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle mb-0" id="ordersTable">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th class="ps-4">Order ID</th>
+                                            <th>Customer</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Low Stock Alert -->
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-white border-bottom py-3">
+                            <h5 class="mb-0 fw-bold">Low Stock Alert</h5>
+                        </div>
+                        <div class="card-body" id="lowStockList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../js/db.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        applySettings();
+        loadDashboardData();
+        buildNotifications();
+
+        // Close notif dropdown on outside click
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('#bellBtn') && !e.target.closest('#notifDropdown')) {
+                document.getElementById('notifDropdown').style.display = 'none';
+            }
+        });
+    });
+
+    function applySettings() {
+        const s = DB.getSettings();
+        document.getElementById('sidebarStoreName').textContent = s.storeName + ' Admin';
+        const user = JSON.parse(localStorage.getItem('ss_currentUser'));
+        if (user) {
+            document.getElementById('adminName').textContent = user.name;
+            document.getElementById('adminInitials').textContent = user.name.charAt(0).toUpperCase();
+        }
+    }
+
+    function buildNotifications() {
+        const orders = DB.getOrders();
+        const products = DB.getProducts();
+        const newOrders = orders.filter(o => o.status === 'Processing');
+        const lowStock  = products.filter(p => p.stock <= 5);
+
+        const total = newOrders.length + lowStock.length;
+        document.getElementById('bellBadge').textContent = total;
+        document.getElementById('navOrderCount').textContent = newOrders.length;
+
+        let html = '';
+        newOrders.forEach(o => {
+            html += `<a href="orders.html" class="d-flex align-items-center p-3 border-bottom text-decoration-none text-dark">
+                <div class="rounded-circle bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center me-3" style="width:35px;height:35px;"><i class="fas fa-shopping-cart"></i></div>
+                <div><p class="mb-0 small fw-bold">New Order ${o.id}</p><p class="mb-0 text-muted" style="font-size:0.75rem;">From ${o.customerName} – ₹${o.total.toLocaleString()}</p></div>
+            </a>`;
+        });
+        lowStock.forEach(p => {
+            html += `<a href="products.html" class="d-flex align-items-center p-3 border-bottom text-decoration-none text-dark">
+                <div class="rounded-circle bg-warning bg-opacity-10 text-warning d-flex align-items-center justify-content-center me-3" style="width:35px;height:35px;"><i class="fas fa-exclamation-triangle"></i></div>
+                <div><p class="mb-0 small fw-bold">Low Stock</p><p class="mb-0 text-muted" style="font-size:0.75rem;">${p.name} – ${p.stock} left</p></div>
+            </a>`;
+        });
+        if (!html) html = '<p class="text-muted text-center py-4 small">No new notifications</p>';
+        document.getElementById('notifList').innerHTML = html;
+    }
+
+    function toggleNotifications() {
+        const d = document.getElementById('notifDropdown');
+        d.style.display = d.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function loadDashboardData() {
+        const products = DB.getProducts();
+        const orders   = DB.getOrders();
+        const users    = DB.getUsers();
+
+        const revenue = orders.reduce((acc, o) => acc + (o.total || 0), 0);
+        document.getElementById('statRevenue').textContent  = '₹' + revenue.toLocaleString();
+        document.getElementById('statOrders').textContent   = orders.length;
+        document.getElementById('statUsers').textContent    = users.length;
+        document.getElementById('statProducts').textContent = products.length;
+
+        // Recent Orders Table
+        let orderHtml = '';
+        orders.slice().reverse().slice(0, 5).forEach(o => {
+            let bc = 'bg-secondary';
+            if (o.status === 'Processing') bc = 'bg-warning text-dark';
+            else if (o.status === 'Shipped')    bc = 'bg-primary';
+            else if (o.status === 'Delivered')  bc = 'bg-success';
+            else if (o.status === 'Refunded')   bc = 'bg-danger';
+
+            orderHtml += `
+            <tr>
+                <td class="ps-4 fw-bold text-primary">${o.id}</td>
+                <td>${o.customerName}</td>
+                <td>₹${o.total.toLocaleString()}</td>
+                <td><span class="badge ${bc}">${o.status}</span></td>
+                <td>
+                    <div class="d-flex gap-2">
+                        <select class="form-select form-select-sm" onchange="updateStatus('${o.id}', this.value)" style="width:115px;">
+                            <option value="Processing" ${o.status==='Processing'?'selected':''}>Processing</option>
+                            <option value="Shipped"    ${o.status==='Shipped'?'selected':''}>Shipped</option>
+                            <option value="Delivered"  ${o.status==='Delivered'?'selected':''}>Delivered</option>
+                        </select>
+                        <a href="orders.html" class="btn btn-sm btn-outline-primary" title="View"><i class="fas fa-eye"></i></a>
+                    </div>
+                </td>
+            </tr>`;
+        });
+        document.querySelector('#ordersTable tbody').innerHTML = orderHtml || `<tr><td colspan="5" class="text-center py-4 text-muted">No recent orders.</td></tr>`;
+
+        // Low Stock
+        let stockHtml = '';
+        products.filter(p => p.stock <= 5).forEach(p => {
+            const icon = p.stock === 0
+                ? `<small class="text-danger fw-bold"><i class="fas fa-times-circle me-1"></i>Out of Stock</small>`
+                : `<small class="text-warning fw-bold"><i class="fas fa-exclamation-triangle me-1"></i>Only ${p.stock} left</small>`;
+            stockHtml += `
+            <div class="d-flex align-items-center mb-3">
+                <img src="${p.image || p.img}" class="rounded me-3 border" style="width:50px;height:50px;object-fit:cover;">
+                <div class="flex-grow-1">
+                    <h6 class="mb-0 fw-bold text-truncate" style="max-width:175px;" title="${p.name}">${p.name}</h6>
+                    ${icon}
+                </div>
+            </div>`;
+        });
+        document.getElementById('lowStockList').innerHTML = stockHtml || `<p class="text-muted text-center pt-3"><i class="fas fa-check-circle text-success me-1"></i>Inventory healthy!</p>`;
+    }
+
+    function updateStatus(id, status) {
+        DB.updateOrderStatus(id, status);
+        loadDashboardData();
+        buildNotifications();
+    }
+</script>
+</body>
+</html>

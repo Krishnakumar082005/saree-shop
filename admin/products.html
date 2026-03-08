@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Products - Silk Sutra Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #f4f6f9; }
+        .sidebar { min-height: 100vh; background-color: #343a40; color: #fff; }
+        .sidebar a { color: #c2c7d0; text-decoration: none; padding: 10px 15px; display: block; border-radius: 5px; margin-bottom: 5px; }
+        .sidebar a:hover, .sidebar a.active { background-color: #007bff; color: #fff; }
+        .product-thumb { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; }
+        #imgPreview { width: 100%; max-height: 200px; object-fit: cover; border-radius: 8px; display: none; }
+    </style>
+</head>
+<body>
+<div class="d-flex">
+    <div class="sidebar p-3" style="width:250px;">
+        <div class="text-center mb-4">
+            <i class="fas fa-dharmachakra fa-2x text-warning mb-2"></i>
+            <h5 class="fw-bold mb-0" id="sidebarStoreName">Silk Sutra Admin</h5>
+        </div>
+        <a href="index.html"><i class="fas fa-tachometer-alt me-2"></i> Dashboard</a>
+        <a href="products.html" class="active"><i class="fas fa-box me-2"></i> Products</a>
+        <a href="orders.html"><i class="fas fa-shopping-cart me-2"></i> Orders <span class="badge bg-danger ms-2" id="navOrderCount">0</span></a>
+        <a href="customers.html"><i class="fas fa-users me-2"></i> Customers</a>
+        <a href="settings.html"><i class="fas fa-cog me-2"></i> Settings</a>
+        <hr class="border-secondary my-4">
+        <a href="../index.html"><i class="fas fa-store me-2"></i> View Store</a>
+        <a href="../account/login.html" onclick="localStorage.removeItem('ss_currentUser')"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
+    </div>
+
+    <div class="flex-grow-1">
+        <nav class="navbar navbar-expand bg-white shadow-sm px-4 py-3 mb-4">
+            <h5 class="fw-bold mb-0">Product Management</h5>
+            <div class="ms-auto">
+                <button class="btn btn-primary" onclick="openModal()"><i class="fas fa-plus me-2"></i>Add New Product</button>
+            </div>
+        </nav>
+
+        <div class="container-fluid px-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0" id="productsTable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-4">Image</th>
+                                    <th>Name</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Stock</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add/Edit Product Modal -->
+<div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title fw-bold" id="modalTitle">Add New Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="productForm" onsubmit="saveProduct(event)">
+                    <input type="hidden" id="pId">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label fw-bold">Product Name *</label>
+                            <input type="text" class="form-control" id="pName" required placeholder="e.g. Crimson Kanjeevaram Silk Saree">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Category *</label>
+                            <select class="form-select" id="pCategory" required onchange="toggleOtherCategory(this.value)">
+                                <option value="">-- Select Category --</option>
+                                <option value="silk">Silk</option>
+                                <option value="cotton">Cotton</option>
+                                <option value="bridal">Bridal</option>
+                                <option value="party">Party Wear</option>
+                                <option value="other">Other (specify below)</option>
+                            </select>
+                            <input type="text" class="form-control mt-2" id="pCategoryOther" placeholder="Type your category e.g. Chiffon, Georgette..." style="display:none;">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">Sale Price (₹) *</label>
+                            <input type="number" class="form-control" id="pPrice" min="0" required placeholder="5000">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">Original Price (₹)</label>
+                            <input type="number" class="form-control" id="pOriginalPrice" min="0" placeholder="6000">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Stock Quantity *</label>
+                            <input type="number" class="form-control" id="pStock" min="0" required placeholder="10">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Discount %</label>
+                            <input type="number" class="form-control" id="pDiscount" min="0" max="100" placeholder="0">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold">Product Image</label>
+                            <div class="border rounded p-3 bg-light text-center mb-2">
+                                <img id="imgPreview" src="" alt="Preview">
+                                <label for="pImageFile" class="btn btn-outline-primary btn-sm mb-2 mt-1">
+                                    <i class="fas fa-upload me-2"></i>Upload Image
+                                    <input type="file" id="pImageFile" accept="image/*" style="display:none;" onchange="previewImage(this)">
+                                </label>
+                                <p class="text-muted small mb-0">OR paste an image URL below:</p>
+                            </div>
+                            <input type="url" class="form-control" id="pImageUrl" placeholder="https://... (optional if file uploaded)">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold">Description</label>
+                            <textarea class="form-control" id="pDesc" rows="3" placeholder="Describe the product..."></textarea>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="pIsNew">
+                                <label class="form-check-label" for="pIsNew">Mark as New Arrival</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary px-4"><i class="fas fa-save me-2"></i>Save Product</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../js/db.js"></script>
+<script>
+    let productModal;
+    let currentImageBase64 = '';
+
+    document.addEventListener('DOMContentLoaded', () => {
+        productModal = new bootstrap.Modal(document.getElementById('productModal'));
+        const s = DB.getSettings();
+        document.getElementById('sidebarStoreName').textContent = s.storeName + ' Admin';
+        document.getElementById('navOrderCount').textContent = DB.getOrders().filter(o => o.status === 'Processing').length;
+        loadProducts();
+    });
+
+    function toggleOtherCategory(val) {
+        document.getElementById('pCategoryOther').style.display = val === 'other' ? 'block' : 'none';
+    }
+
+    function previewImage(input) {
+        const file = input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            currentImageBase64 = e.target.result;
+            const preview = document.getElementById('imgPreview');
+            preview.src = currentImageBase64;
+            preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function loadProducts() {
+        const products = DB.getProducts();
+        let html = '';
+
+        if (products.length === 0) {
+            document.querySelector('#productsTable tbody').innerHTML = `<tr><td colspan="6" class="text-center py-5 text-muted">No products yet. Click "Add New Product" to begin.</td></tr>`;
+            return;
+        }
+
+        products.forEach(p => {
+            const imgSrc = p.image || p.img || 'https://via.placeholder.com/60';
+            const catDisplay = p.category.charAt(0).toUpperCase() + p.category.slice(1);
+            const stockBadge = p.stock === 0
+                ? `<span class="badge bg-danger">Out of Stock</span>`
+                : p.stock <= 5
+                    ? `<span class="badge bg-warning text-dark">${p.stock} left</span>`
+                    : `<span class="badge bg-success">${p.stock}</span>`;
+
+            html += `
+            <tr>
+                <td class="ps-4"><img src="${imgSrc}" alt="${p.name}" class="product-thumb border"></td>
+                <td class="fw-bold">${p.name}</td>
+                <td><span class="badge bg-light text-dark border">${catDisplay}</span></td>
+                <td>₹${p.price.toLocaleString()}</td>
+                <td>${stockBadge}</td>
+                <td>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-sm btn-outline-primary" onclick="editProduct('${p.id}')"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteProduct('${p.id}')"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                </td>
+            </tr>`;
+        });
+        document.querySelector('#productsTable tbody').innerHTML = html;
+    }
+
+    function openModal(product = null) {
+        currentImageBase64 = '';
+        document.getElementById('productForm').reset();
+        document.getElementById('imgPreview').style.display = 'none';
+        document.getElementById('imgPreview').src = '';
+        document.getElementById('pCategoryOther').style.display = 'none';
+
+        if (product) {
+            document.getElementById('modalTitle').textContent = 'Edit Product';
+            document.getElementById('pId').value             = product.id;
+            document.getElementById('pName').value           = product.name;
+            document.getElementById('pPrice').value          = product.price;
+            document.getElementById('pOriginalPrice').value  = product.originalPrice || '';
+            document.getElementById('pStock').value          = product.stock;
+            document.getElementById('pDiscount').value       = product.discount || 0;
+            document.getElementById('pDesc').value           = product.description || '';
+            document.getElementById('pIsNew').checked        = product.isNew || false;
+
+            // Handle categories
+            const knownCats = ['silk', 'cotton', 'bridal', 'party'];
+            if (knownCats.includes(product.category)) {
+                document.getElementById('pCategory').value = product.category;
+            } else {
+                document.getElementById('pCategory').value = 'other';
+                document.getElementById('pCategoryOther').value = product.category;
+                document.getElementById('pCategoryOther').style.display = 'block';
+            }
+
+            const imgSrc = product.image || product.img || '';
+            if (imgSrc.startsWith('data:')) {
+                currentImageBase64 = imgSrc;
+                document.getElementById('imgPreview').src = imgSrc;
+                document.getElementById('imgPreview').style.display = 'block';
+            } else {
+                document.getElementById('pImageUrl').value = imgSrc;
+            }
+        } else {
+            document.getElementById('modalTitle').textContent = 'Add New Product';
+            document.getElementById('pId').value = '';
+        }
+        productModal.show();
+    }
+
+    function editProduct(id) {
+        const p = DB.getProducts().find(x => x.id === id);
+        if (p) openModal(p);
+    }
+
+    function saveProduct(e) {
+        e.preventDefault();
+        let category = document.getElementById('pCategory').value;
+        if (category === 'other') {
+            category = document.getElementById('pCategoryOther').value.trim().toLowerCase() || 'other';
+        }
+
+        // Image: uploaded file takes priority, then URL
+        let imgFinal = currentImageBase64 || document.getElementById('pImageUrl').value.trim() || 'https://via.placeholder.com/600x800?text=No+Image';
+
+        const productData = {
+            name:          document.getElementById('pName').value.trim(),
+            category,
+            price:         parseFloat(document.getElementById('pPrice').value),
+            originalPrice: parseFloat(document.getElementById('pOriginalPrice').value) || parseFloat(document.getElementById('pPrice').value),
+            stock:         parseInt(document.getElementById('pStock').value),
+            discount:      parseInt(document.getElementById('pDiscount').value) || 0,
+            description:   document.getElementById('pDesc').value.trim(),
+            isNew:         document.getElementById('pIsNew').checked,
+            image:         imgFinal,
+            img:           imgFinal,
+        };
+
+        const id = document.getElementById('pId').value;
+        if (id) {
+            DB.updateProduct(id, productData);
+        } else {
+            DB.addProduct(productData);
+        }
+
+        productModal.hide();
+        loadProducts();
+    }
+
+    function deleteProduct(id) {
+        const p = DB.getProducts().find(x => x.id === id);
+        if (p && confirm(`Delete "${p.name}"? This cannot be undone.`)) {
+            DB.deleteProduct(id);
+            loadProducts();
+        }
+    }
+</script>
+</body>
+</html>
